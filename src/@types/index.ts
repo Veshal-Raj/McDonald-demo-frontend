@@ -32,7 +32,7 @@ export interface CustomerInfo {
 }
 
 export interface Order {
-  id: string;
+  _id: string;
   estimatedTime: string;
   items: CartItem[];
   customerInfo: CustomerInfo;

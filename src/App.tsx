@@ -25,6 +25,7 @@ function App() {
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [sessionId] = useState(() => getSessionId());
+  const [checkoutResetTrigger, setCheckoutResetTrigger] = useState(0);
 
   const cartTotal = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
   const cartItemCount = cartItems.reduce((count, item) => count + item.quantity, 0);
@@ -60,7 +61,6 @@ function App() {
   const addToCart = async (productId: string) => {
     try {
       const updatedItems = await addToCartAPI(sessionId, productId, 1);
-      console.log("updated items --- ", updatedItems);
       setCartItems(updatedItems);
     } catch (error) {
       console.error('Error adding to cart:', error);
@@ -104,9 +104,8 @@ function App() {
       setCartItems([]);
       setIsCheckoutOpen(false);
       setIsCartOpen(false);
-      
-      // Show success message
-      toast.success(`Order confirmed! Order ID: ${order.id}. Estimated time: ${order.estimatedTime}`)
+      setCheckoutResetTrigger(prev => prev + 1)
+      toast.success(`Order confirmed! Order ID: ${order._id}. Estimated time: ${order.estimatedTime}`)
     } catch (error) {
       console.error('Error during checkout:', error);
       toast.error("Failed processing order. Please try again.");
@@ -158,6 +157,7 @@ function App() {
         cartItems={cartItems}
         cartTotal={cartTotal}
         onCheckout={handleCheckout}
+        resetTrigger={checkoutResetTrigger}
       />
     </div>
   );

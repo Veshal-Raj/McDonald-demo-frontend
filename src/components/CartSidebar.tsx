@@ -23,7 +23,6 @@ const CartSidebar: React.FC<CartSidebarProps> = ({
   onClearCart,
   onCheckout
 }) => {
-  console.log("cart items --- ", cartItems)
   return (
     <>
       {/* Backdrop */}

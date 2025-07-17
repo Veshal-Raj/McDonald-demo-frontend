@@ -25,7 +25,8 @@ export const fetchCartItems = async (sessionId: string): Promise<CartItem[]> => 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    const data: CartResponse = await response.json();
+    const apiResponse: ApiResponse = await response.json();
+    const data = apiResponse?.data;
     return data?.items || [];
   } catch (error) {
     console.error('Error fetching cart:', error);
@@ -51,7 +52,8 @@ export const addToCart = async (sessionId: string, productId: string, quantity: 
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     
-    const data: CartResponse = await response.json();
+    const apiResponse: ApiResponse = await response.json();
+    const data = apiResponse?.data;
     return data.items || [];
   } catch (error) {
     console.error('Error adding to cart:', error);
@@ -76,8 +78,9 @@ export const removeFromCart = async (sessionId: string, productId: string): Prom
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     
-    const data: CartResponse = await response.json();
-    return data.items || [];
+    const apiResponse: ApiResponse = await response.json();
+    const data = apiResponse?.data;
+    return data?.items || [];
   } catch (error) {
     console.error('Error removing from cart:', error);
     throw error;
@@ -102,8 +105,9 @@ export const updateQuantity = async (sessionId: string, productId: string, quant
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     
-    const data: CartResponse = await response.json();
-    return data.cart?.items || [];
+    const apiResponse: ApiResponse = await response.json();
+    const data = apiResponse?.data;
+    return data?.items || [];
   } catch (error) {
     console.error('Error updating quantity:', error);
     throw error;
@@ -126,8 +130,9 @@ export const clearCart = async (sessionId: string): Promise<CartItem[]> => {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     
-    const data: CartResponse = await response.json();
-    return data.cart?.items || [];
+    const apiResponse: ApiResponse = await response.json();
+    const data = apiResponse?.data;
+    return data?.items || [];
   } catch (error) {
     console.error('Error clearing cart:', error);
     throw error;
@@ -152,8 +157,9 @@ export const checkout = async (sessionId: string, customerInfo: CustomerInfo): P
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     
-    const order: Order = await response.json();
-    return order;
+    const apiResponse: ApiResponse = await response.json();
+    const data = apiResponse?.data;
+    return data;
   } catch (error) {
     console.error('Error during checkout:', error);
     throw error;

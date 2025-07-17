@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { X, CreditCard, User, Phone, MapPin, Mail } from 'lucide-react';
 import { CartItem, CustomerInfo } from '../@types';
 
@@ -8,6 +8,7 @@ interface CheckoutModalProps {
   cartItems: CartItem[];
   cartTotal: number;
   onCheckout: (customerInfo: CustomerInfo) => void;
+  resetTrigger?: number,
 }
 
 const CheckoutModal: React.FC<CheckoutModalProps> = ({
@@ -15,7 +16,8 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
   onClose,
   cartItems,
   cartTotal,
-  onCheckout
+  onCheckout,
+  resetTrigger
 }) => {
   const [customerInfo, setCustomerInfo] = useState<CustomerInfo>({
     name: '',
@@ -34,6 +36,16 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
     onCheckout(customerInfo);
   };
 
+  useEffect(() => {
+    if (resetTrigger) {
+      setCustomerInfo({
+        name: '',
+        email: '',
+        phone: '',
+        address: ''
+      });
+    }
+  }, [resetTrigger])
   if (!isOpen) return null;
 
   return (
@@ -56,8 +68,8 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
             <div className="space-y-2 mb-3">
               {cartItems.map((item) => (
                 <div key={item.productId} className="flex justify-between text-sm">
-                  <span>{item.product.name} x{item.quantity}</span>
-                  <span>${(item.product.price * item.quantity).toFixed(2)}</span>
+                  <span>{item.name} x{item.quantity}</span>
+                  <span>${(item.price * item.quantity).toFixed(2)}</span>
                 </div>
               ))}
             </div>
