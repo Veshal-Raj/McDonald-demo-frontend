@@ -7,8 +7,8 @@ interface CartSidebarProps {
   onClose: () => void;
   cartItems: CartItem[];
   cartTotal: number;
-  onRemoveItem: (productId: number) => void;
-  onUpdateQuantity: (productId: number, quantity: number) => void;
+  onRemoveItem: (productId: string) => void;
+  onUpdateQuantity: (productId: string, quantity: number) => void;
   onClearCart: () => void;
   onCheckout: () => void;
 }
@@ -23,6 +23,7 @@ const CartSidebar: React.FC<CartSidebarProps> = ({
   onClearCart,
   onCheckout
 }) => {
+  console.log("cart items --- ", cartItems)
   return (
     <>
       {/* Backdrop */}
@@ -67,17 +68,17 @@ const CartSidebar: React.FC<CartSidebarProps> = ({
                     className="flex items-center space-x-3 bg-gray-50 p-3 rounded-lg"
                   >
                     <img
-                      src={item.product.image}
-                      alt={item.product.name}
+                      src={item.image}
+                      alt={item.name}
                       className="w-16 h-16 object-cover rounded"
                     />
                     
                     <div className="flex-1 min-w-0">
                       <h4 className="font-semibold text-gray-900 truncate">
-                        {item.product.name}
+                        {item.name}
                       </h4>
                       <p className="text-sm text-gray-600">
-                        ${item.product.price.toFixed(2)} each
+                        ${item.price.toFixed(2)} each
                       </p>
                     </div>
                     

@@ -1,5 +1,5 @@
 export interface Product {
-  _id: number;
+  _id: string;
   name: string;
   description: string;
   price: number;
@@ -8,9 +8,20 @@ export interface Product {
 }
 
 export interface CartItem {
-  productId: number;
+  productId: string;
+  name: string;
+  price: number;
+  image: string;
   quantity: number;
-  product: Product;
+}
+
+export interface CartResponse {
+  _id: string;
+  sessionId: string;
+  items: CartItem[];
+  total: number;
+  lastUpdated: string;
+  __v: number;
 }
 
 export interface CustomerInfo {
@@ -35,7 +46,6 @@ export interface ApiResponse<T> {
   success: boolean;
 }
 
-export interface CartResponse {
-  items: CartItem[];
-  total: number;
+export interface ProductsResponse {
+  data: Product[];
 }

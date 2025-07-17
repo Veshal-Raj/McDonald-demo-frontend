@@ -26,7 +26,7 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [sessionId] = useState(() => getSessionId());
 
-  const cartTotal = cartItems.reduce((total, item) => total + (item.product.price * item.quantity), 0);
+  const cartTotal = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
   const cartItemCount = cartItems.reduce((count, item) => count + item.quantity, 0);
 
   useEffect(() => {
@@ -57,9 +57,10 @@ function App() {
     }
   };
 
-  const addToCart = async (productId: number) => {
+  const addToCart = async (productId: string) => {
     try {
       const updatedItems = await addToCartAPI(sessionId, productId, 1);
+      console.log("updated items --- ", updatedItems);
       setCartItems(updatedItems);
     } catch (error) {
       console.error('Error adding to cart:', error);
@@ -67,7 +68,7 @@ function App() {
     }
   };
 
-  const removeFromCart = async (productId: number) => {
+  const removeFromCart = async (productId: string) => {
     try {
       const updatedItems = await removeFromCartAPI(sessionId, productId);
       setCartItems(updatedItems);
@@ -77,7 +78,7 @@ function App() {
     }
   };
 
-  const updateQuantity = async (productId: number, quantity: number) => {
+  const updateQuantity = async (productId: string, quantity: number) => {
     try {
       const updatedItems = await updateQuantityAPI(sessionId, productId, quantity);
       setCartItems(updatedItems);

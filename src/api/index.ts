@@ -1,48 +1,7 @@
+import { Product, CartItem, CustomerInfo, Order, ApiResponse, CartResponse, ProductsResponse } from '../types';
+
 // API base URL
 const BASE_URL = import.meta.env.VITE_BASE_URL;
-
-// Types
-export interface Product {
-  _id: number;
-  name: string;
-  description: string;
-  price: number;
-  image: string;
-  category: string;
-}
-
-export interface CartItem {
-  productId: number;
-  quantity: number;
-  product: Product;
-}
-
-export interface CustomerInfo {
-  name: string;
-  email: string;
-  phone: string;
-  address: string;
-}
-
-export interface Order {
-  id: string;
-  estimatedTime: string;
-  items: CartItem[];
-  customerInfo: CustomerInfo;
-  total: number;
-}
-
-// API Response types
-interface ApiResponse<T> {
-  data: T;
-  message?: string;
-  success: boolean;
-}
-
-interface CartResponse {
-  items: CartItem[];
-  total: number;
-}
 
 // Products API
 export const fetchProducts = async (): Promise<Product[]> => {
@@ -51,7 +10,7 @@ export const fetchProducts = async (): Promise<Product[]> => {
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    const { data }: ApiResponse<Product[]> = await response.json();
+    const { data }: ProductsResponse = await response.json();
     return data;
   } catch (error) {
     console.error('Error fetching products:', error);
@@ -74,7 +33,7 @@ export const fetchCartItems = async (sessionId: string): Promise<CartItem[]> => 
   }
 };
 
-export const addToCart = async (sessionId: string, productId: number, quantity: number = 1): Promise<CartItem[]> => {
+export const addToCart = async (sessionId: string, productId: string, quantity: number = 1): Promise<CartItem[]> => {
   try {
     const response = await fetch(`${BASE_URL}/api/cart/add`, {
       method: 'POST',
@@ -100,7 +59,7 @@ export const addToCart = async (sessionId: string, productId: number, quantity: 
   }
 };
 
-export const removeFromCart = async (sessionId: string, productId: number): Promise<CartItem[]> => {
+export const removeFromCart = async (sessionId: string, productId: string): Promise<CartItem[]> => {
   try {
     const response = await fetch(`${BASE_URL}/api/cart/remove`, {
       method: 'POST',
@@ -125,7 +84,7 @@ export const removeFromCart = async (sessionId: string, productId: number): Prom
   }
 };
 
-export const updateQuantity = async (sessionId: string, productId: number, quantity: number): Promise<CartItem[]> => {
+export const updateQuantity = async (sessionId: string, productId: string, quantity: number): Promise<CartItem[]> => {
   try {
     const response = await fetch(`${BASE_URL}/api/cart/update`, {
       method: 'POST',
@@ -144,7 +103,7 @@ export const updateQuantity = async (sessionId: string, productId: number, quant
     }
     
     const data: CartResponse = await response.json();
-    return data.items || [];
+    return data.cart?.items || [];
   } catch (error) {
     console.error('Error updating quantity:', error);
     throw error;
@@ -168,7 +127,7 @@ export const clearCart = async (sessionId: string): Promise<CartItem[]> => {
     }
     
     const data: CartResponse = await response.json();
-    return data.items || [];
+    return data.cart?.items || [];
   } catch (error) {
     console.error('Error clearing cart:', error);
     throw error;
@@ -214,6 +173,7 @@ export const getSessionId = (): string => {
   }
   return id;
 };
+
 
 export default {
   fetchProducts,
